@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Yo4MDD+xa6o7CjoVomCMBMAag8dpDhiuVQfDojaHXEA='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vK7EPahYJjnRY9G6ZWJvY7Q0SI8blq/+uJxZWDr1Px4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>环珠江口 · 景观与游线调研图谱</title>
 <link rel="stylesheet" href="vendor/leaflet.css">
 <style>
@@ -75,10 +75,9 @@ data.sheets.forEach((sheet,sheetIndex)=>{
 const map = L.map('map',{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:false,attributionControl:true});
 map.attributionControl.setPrefix(false);
 const bounds = [[0,0],[1893,2200]];
-const base = L.imageOverlay('../figures/basemap-osm-2200.png',bounds,{opacity:.92,attribution:'底图：OpenStreetMap contributors · ODbL'}).addTo(map);
+const base = L.imageOverlay('../figures/basemap-reference.png',bounds,{opacity:.85,attribution:'底图：用户提供 · 示意坐标'}).addTo(map);
 map.setMaxBounds([[-500,-500],[2393,2700]]);
-const project = pair=>[0.7470639829*pair[0]-0.1062205853*pair[1]+348.5934531,-0.0074845766*pair[0]+0.7592044399*pair[1]+195.1232507];
-const coordinate = pair=>{const projected=project(pair);return [1893-projected[1],projected[0]];};
+const coordinate = pair=>[1893-pair[1],pair[0]];
 const drawing = L.layerGroup().addTo(map);
 const places=L.layerGroup().addTo(map);
 const shapes = new Map();
@@ -163,10 +162,10 @@ function pairDiagram(config,pair){
  const svgNode=(tag,attributes,text)=>{const element=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attributes).forEach(([key,value])=>element.setAttribute(key,String(value)));if(text!==undefined)element.textContent=text;return element;};
  const figure=make('figure');figure.style.margin='0';
  const svg=svgNode('svg',{viewBox:'0 0 2200 1893',class:'pair-map',role:'img','aria-label':tr(pair[0])+t('：城市研究区、码头及联系示意',' city study areas, terminals and schematic connections')});
- svg.append(svgNode('title',{},tr(pair[0])),svgNode('image',{href:'../figures/basemap-osm-2200.png',width:2200,height:1893}),svgNode('rect',{width:2200,height:1893,fill:'#fff',opacity:.25}));
- config.cities.forEach((key,index)=>{const city=research.diagramCities[key];const color=index===0?'#227f73':'#b85b3a';city.polygons.forEach(coords=>svg.append(svgNode('polygon',{points:coords.map(project).map(position=>position.join(',')).join(' '),fill:color,'fill-opacity':.23,stroke:color,'stroke-width':4,'stroke-dasharray':'12 8'})));const label=project(city.label);svg.append(svgNode('text',{x:label[0],y:label[1],'font-size':44,'font-weight':700,fill:color,stroke:'#fff','stroke-width':9,'paint-order':'stroke'},tr(city.name)));});
+ svg.append(svgNode('title',{},tr(pair[0])),svgNode('image',{href:'../figures/basemap-reference.png',width:2200,height:1893}),svgNode('rect',{width:2200,height:1893,fill:'#fff',opacity:.25}));
+ config.cities.forEach((key,index)=>{const city=research.diagramCities[key];const color=index===0?'#227f73':'#b85b3a';city.polygons.forEach(coords=>svg.append(svgNode('polygon',{points:coords.map(position=>position.join(',')).join(' '),fill:color,'fill-opacity':.23,stroke:color,'stroke-width':4,'stroke-dasharray':'12 8'})));svg.append(svgNode('text',{x:city.label[0],y:city.label[1],'font-size':44,'font-weight':700,fill:color,stroke:'#fff','stroke-width':9,'paint-order':'stroke'},tr(city.name)));});
  const portIds=[...new Set(config.links.flat())];
- const ports=portIds.map(id=>{const point=records.find(record=>record.id===id&&record.type==='point');return point?{xy:project(point.xy),name:field(point,'name')}: {xy:project(research.diagramPorts[id].xy),name:tr(research.diagramPorts[id].name)};});
+ const ports=portIds.map(id=>{const point=records.find(record=>record.id===id&&record.type==='point');return point?{xy:point.xy,name:field(point,'name')}: {xy:research.diagramPorts[id].xy,name:tr(research.diagramPorts[id].name)};});
  const color=config.status==='listed'?'#285f82':config.status==='announced'?'#a66422':'#626b70';
  config.links.forEach(([from,to])=>{const origin=ports[portIds.indexOf(from)].xy;const destination=ports[portIds.indexOf(to)].xy;svg.append(svgNode('line',{x1:origin[0],y1:origin[1],x2:destination[0],y2:destination[1],stroke:'#fff','stroke-width':12}),svgNode('line',{x1:origin[0],y1:origin[1],x2:destination[0],y2:destination[1],stroke:color,'stroke-width':7,'stroke-dasharray':config.status==='listed'?'none':'20 13'}));});
  const key=make('figcaption',undefined,'port-key');ports.forEach((port,index)=>{svg.append(svgNode('circle',{cx:port.xy[0],cy:port.xy[1],r:25,fill:'#194e73',stroke:'#fff','stroke-width':5}),svgNode('text',{x:port.xy[0],y:port.xy[1]+10,'text-anchor':'middle','font-size':29,'font-weight':700,fill:'#fff'},String(index+1)));const label=make('span');label.append(make('b',String(index+1)),document.createTextNode(port.name));key.append(label);});
@@ -185,7 +184,7 @@ function renderMeasureMaps(panel){
  Object.entries(measures).filter(([key])=>key!=='pending').forEach(([key,label])=>{
   const related=recordsForMeasure(key);const card=make('article',undefined,'measure-map-card');const head=make('header');head.append(make('h3',tr(label)),make('span',related.length+' '+t('个对象','objects'),'measure-map-count'));const mapElement=make('div',undefined,'measure-map');mapElement.setAttribute('aria-label',tr(label)+' '+t('相关项目地图','related-project map'));card.append(head,mapElement);grid.append(card);
   const miniMap=L.map(mapElement,{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:false,attributionControl:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false});
-  L.imageOverlay('../figures/basemap-osm-2200.png',bounds,{opacity:.92}).addTo(miniMap);const layer=L.layerGroup().addTo(miniMap);const latLngs=[];
+  L.imageOverlay('../figures/basemap-reference.png',bounds,{opacity:.85}).addTo(miniMap);const layer=L.layerGroup().addTo(miniMap);const latLngs=[];
   related.forEach(record=>{
    const color=colors[record.category]||'#126c62';
    if(record.type==='point'){const position=coordinate(record.xy);latLngs.push(position);L.circleMarker(position,{radius:7,color:'#fff',weight:2,fillColor:color,fillOpacity:.95}).bindTooltip(field(record,'name'),{permanent:true,direction:'top',className:'measure-label'}).addTo(layer);}
@@ -237,7 +236,7 @@ function renderRouteSupply(){
  const selected=new Set(routeDefs.map(route=>route.id));const routeLayers=new Map();const portLayers=new Map();
  routeDefs.forEach(route=>{const product=research.products[route.product];const label=make('label',undefined,'route-control');const input=document.createElement('input');input.type='checkbox';input.checked=true;input.value=route.id;const text=make('span');text.append(make('strong',tr(product.name)),make('small',route.status==='indicative'?t('indicative 概念连线 · 具体落位待核','Indicative concept line · exact placement unverified'):route.status==='announced'?t('报道／开航关系 · 非航迹','Reported / launched relationship · not a track'):t('目录或运营关系 · 非航迹','Directory / operating relationship · not a track')));label.append(input,text);controls.append(label);input.addEventListener('change',()=>{if(input.checked)selected.add(route.id);else selected.delete(route.id);renderRouteLayers();});});
  const key=make('div',undefined,'route-key');const listedKey=make('span');listedKey.append(make('i',undefined,'listed'),document.createTextNode(t('目录／运营关系','Documented / operating')));const indicativeKey=make('span');indicativeKey.append(make('i',undefined,'indicative'),document.createTextNode(t('indicative 概念连线','Indicative concept')));key.append(listedKey,indicativeKey);controls.append(key);shell.append(mapElement,controls);panel.append(shell);
- routeMap=L.map(mapElement,{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:true,attributionControl:false});L.imageOverlay('../figures/basemap-osm-2200.png',bounds,{opacity:.92}).addTo(routeMap);routeMap.fitBounds(bounds,{padding:[15,15]});
+ routeMap=L.map(mapElement,{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:true,attributionControl:false});L.imageOverlay('../figures/basemap-reference.png',bounds,{opacity:.85}).addTo(routeMap);routeMap.fitBounds(bounds,{padding:[15,15]});
  function renderRouteLayers(){routeLayers.forEach(layer=>layer.remove());portLayers.forEach(layer=>layer.remove());routeLayers.clear();portLayers.clear();const portIds=new Set();routeDefs.filter(route=>selected.has(route.id)).forEach(route=>{const positions=routePath(route.path);if(positions.length<2)return;const line=L.polyline(positions,{color:route.color,weight:5,opacity:.9,dashArray:route.status==='indicative'?'12 9':undefined}).bindTooltip(tr(research.products[route.product].name),{sticky:true,className:'route-label'}).addTo(routeMap);routeLayers.set(route.id,line);route.ports.forEach(id=>portIds.add(id));});portIds.forEach(id=>{const point=routePoint(id);if(!point)return;const record=records.find(item=>item.id===id&&item.type==='point');const name=record?field(record,'name'):(research.diagramPorts[id]?tr(research.diagramPorts[id].name):id);const marker=L.circleMarker(point,{radius:8,color:'#fff',weight:2,fillColor:'#194e73',fillOpacity:.98}).bindTooltip(name,{permanent:true,direction:'top',className:'route-label'}).addTo(routeMap);portLayers.set(id,marker);});}
  renderRouteLayers();
  panel.append(make('div',undefined,'table-scroll'));const tableWrap=panel.lastChild;const tableElement=table([['产品／主题','Product / theme'],['起止与组织','Organisation'],['景观及活动','Experience'],['船型／时长／客群','Vessel / duration / audience'],['证据与边界','Evidence and limits']],research.products.map(product=>{const title=make('strong',tr(product.name));return [title,product.organise,product.experience,product.audience,product.status];}));tableWrap.replaceWith(table);
@@ -268,7 +267,7 @@ function setLanguage(value){
  [['zoom-in','放大','Zoom in'],['zoom-out','缩小','Zoom out'],['fit','完整底图','Full basemap'],['focus','当前对象范围','Fit records']].forEach(([id,zh,en])=>{const button=document.getElementById(id);button.title=t(zh,en);button.setAttribute('aria-label',t(zh,en));});document.querySelector('.tabs').setAttribute('aria-label',t('研究视图','Research views'));document.getElementById('map').setAttribute('aria-label',t('珠江口示意资源地图','Estuary schematic resource map'));
  document.getElementById('lang-zh').setAttribute('aria-pressed',String(value==='zh'));document.getElementById('lang-en').setAttribute('aria-pressed',String(value==='en'));
  places.clearLayers();[['南沙','Nansha',[780,260]],['东莞','Dongguan',[1220,135]],['中山','Zhongshan',[630,735]],['深圳','Shenzhen',[1570,535]],['珠海','Zhuhai',[730,1100]],['香港','Hong Kong',[1760,1030]],['伶仃洋','Lingdingyang',[1150,970]]].forEach(([zh,en,position])=>L.tooltip({permanent:true,direction:'center',className:'place-label',interactive:false}).setLatLng(coordinate(position)).setContent(make('span',t(zh,en))).addTo(places));
- map.attributionControl.removeAttribution(base.options.attribution);base.options.attribution=t('底图：OpenStreetMap contributors · ODbL','Basemap: OpenStreetMap contributors · ODbL');map.attributionControl.addAttribution(base.options.attribution);
+ map.attributionControl.removeAttribution(base.options.attribution);base.options.attribution=t('底图：用户提供 · 示意坐标','User-supplied basemap · schematic coordinates');map.attributionControl.addAttribution(base.options.attribution);
  renderLayers();renderResearch();render();const selected=records.find(record=>record.key===selectedKey);if(selected)showDetail(selected);else defaultDetail();lucide.createIcons();requestAnimationFrame(()=>map.invalidateSize());
 }
 document.getElementById('lang-zh').addEventListener('click',()=>setLanguage('zh'));document.getElementById('lang-en').addEventListener('click',()=>setLanguage('en'));document.querySelector('#view-figures > .download').href='../figures/PRD_Mapping_v02.pdf';
