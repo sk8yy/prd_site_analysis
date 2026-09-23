@@ -209,17 +209,22 @@ function routePoint(id){
  return diagramPort?coordinate(diagramPort.xy):null;
 }
 function routePath(path){
- return path.flatMap(item=>Array.isArray(item)?[coordinate(item)]:item==='HKR1'?(records.find(record=>record.id===item)?.coords||[]).map(coordinate):[routePoint(item)]).filter(Boolean);
+ return path.flatMap(item=>{
+  if(Array.isArray(item))return [coordinate(item)];
+  const line=records.find(record=>record.id===item&&record.type==='line');
+  if(line)return line.coords.map(coordinate);
+  const point=routePoint(item);return point?[point]:[];
+ }).filter(Boolean);
 }
 function renderRouteSupply(){
  const panel=document.getElementById('view-products');if(routeMap){routeMap.remove();routeMap=null;}
  panel.replaceChildren(make('h2',t('游线供给与短途组合','Ferry products and short breaks')),make('p',t('线路和港口均只对应下方产品表。实线表示已有目录、售票或开航报道关系；虚线表示 indicative 概念连线，不是AIS航迹。','Routes and ports correspond only to the product table below. Solid lines show documented directory, ticketing or launch relationships; dashed lines are indicative concepts, not AIS tracks.'),'lede'));
  const shell=make('div',undefined,'route-map-shell');const mapElement=make('div',undefined,'route-map');mapElement.setAttribute('aria-label',t('游线供给专用地图','Route supply map'));const controls=make('aside',undefined,'route-controls');controls.append(make('h3',t('图面线路','Mapped routes')),make('p',t('勾选或取消显示线路；港口随线路动态显示。','Toggle routes; related ports update automatically.'),'quiet'));
  const routeDefs=[
-  {id:'R01',product:0,ports:['T1','T2'],path:['T1','T2'],status:'announced',color:'#285f82'},
-  {id:'R02',product:1,ports:['T3'],path:['T3',[1190,550],[1130,635],[1195,690],[1253,496]],status:'listed',color:'#246f9d'},
+  {id:'R01',product:0,ports:['T1','T2'],path:['R01'],status:'announced',color:'#285f82'},
+  {id:'R02',product:1,ports:['T3'],path:['R02'],status:'listed',color:'#246f9d'},
   {id:'R03',product:2,ports:['T1','R3'],path:['T1','R3',[1120,450],'T1'],status:'indicative',color:'#b2762e'},
-  {id:'R04',product:3,ports:['T5'],path:['T5',[845,1050],[805,1200],[900,1320],[926,1180]],status:'indicative',color:'#9a5b2a'},
+  {id:'R04',product:3,ports:['T5'],path:['R04'],status:'indicative',color:'#9a5b2a'},
   {id:'R05',product:4,ports:['HKT1','HKT2','HKT3'],path:['HKR1'],status:'listed',color:'#285f82'},
   {id:'R06',product:5,ports:['HKC2','HKT5'],path:['HKC2','HKT5','HKC2'],status:'listed',color:'#246f9d'},
   {id:'R07',product:6,ports:['T2','GS','DA'],path:['T2','GS','DA','T2'],status:'listed',color:'#285f82'},
