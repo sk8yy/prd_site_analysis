@@ -48,7 +48,8 @@ const tr=value=>Array.isArray(value)?value[language==='en'?1:0]:value;
 const field=(item,key)=>language==='en'?(item[key+'En']||item[key]):item[key];
 const measures={show:['展靓','Showcase'],upgrade:['提质','Upgrade'],avoid:['遮瑕／避让','Avoid / mitigate'],pending:['待研判','Pending']};
 const categories = [
- {key:'industry',name:'工业景观与遗存',color:'#b2762e'},
+ {key:'industrial-heritage',name:'工业遗产',color:'#a34f3f'},
+ {key:'industrial-landscape',name:'工业景观',color:'#b2762e'},
  {key:'history',name:'历史文化',color:'#af4755'},
  {key:'nature',name:'自然与海岛',color:'#277c59'},
  {key:'city',name:'城市景观与天际线',color:'#876185'},
@@ -57,7 +58,7 @@ const categories = [
  {key:'plan',name:'规划与提升',color:'#6274a4'}
 ];
 const colors = {industry:'#b2762e',history:'#af4755',nature:'#277c59',island:'#187f88',city:'#876185',evidence:'#c14360',terminal:'#285f82',context:'#7a8588',plan:'#6274a4',route1:'#c14360',route2:'#246f9d',route3:'#9a5b2a'};
-const presets = {overview:['industry','history','nature'],skyline:['city'],products:['terminal','route'],planning:['plan'],all:categories.map(category=>category.key)};
+const presets = {overview:['industrial-heritage','industrial-landscape','history','nature'],skyline:['city'],products:['terminal','route'],planning:['plan'],all:categories.map(category=>category.key)};
 let enabled = new Set(presets.overview);
 let selectedKey = null;
 const records = [];
@@ -65,11 +66,11 @@ data.sheets.forEach((sheet,sheetIndex)=>{
  [sheet.titleEn,sheet.findingEn,sheet.notesEn]=research.sheets[sheetIndex];sheet.notesEn=[sheet.notesEn];
  sheet.points.forEach(point=>{
   if(research.legacy[point.id])[point.nameEn,point.detailEn]=research.legacy[point.id];
-  const category = point.id==='R3'?'route':({island:'nature',evidence:'city',context:'terminal'}[point.kind]||point.kind);
+  const category = point.id==='R3'?'route':({industry:'industrial-landscape',island:'nature',evidence:'city',context:'terminal'}[point.kind]||point.kind);
   records.push({...point,category,sheet,sheetIndex,key:sheet.file+':'+point.id,type:'point'});
  });
- sheet.lines.forEach((line,lineIndex)=>records.push({...line,id:line.id||(line.kind==='route1'?'R01':line.kind==='route2'?'R02':'shore'+lineIndex),name:line.label||'城市景观候选岸段',nameEn:line.nameEn||'Candidate skyline shoreline',category:line.kind.startsWith('route')?'route':line.kind==='industry'?'industry':'city',detail:line.detail||'候选岸段／观景顺序示意，不是运营航迹或实测视域。',detailEn:line.detailEn||'Candidate shore / viewing sequence, not an operating track or measured viewshed.',sheet,sheetIndex,key:sheet.file+':line'+lineIndex,type:'line'}));
- (sheet.areas||[]).forEach(area=>records.push({...area,category:area.kind==='plan'?'plan':area.kind==='industry'?'industry':'nature',type:'area',sheet,sheetIndex,key:sheet.file+':'+area.id,detail:area.detail||'手工判读景观研究范围，不是法定生态边界、精确面积或进入许可。',detailEn:area.detailEn||'Manually interpreted study footprint, not a statutory boundary, measured area or access permission.'}));
+ sheet.lines.forEach((line,lineIndex)=>records.push({...line,id:line.id||(line.kind==='route1'?'R01':line.kind==='route2'?'R02':'shore'+lineIndex),name:line.label||'城市景观候选岸段',nameEn:line.nameEn||'Candidate skyline shoreline',category:line.kind.startsWith('route')?'route':line.kind==='industry'?'industrial-landscape':'city',detail:line.detail||'候选岸段／观景顺序示意，不是运营航迹或实测视域。',detailEn:line.detailEn||'Candidate shore / viewing sequence, not an operating track or measured viewshed.',sheet,sheetIndex,key:sheet.file+':line'+lineIndex,type:'line'}));
+ (sheet.areas||[]).forEach(area=>records.push({...area,category:area.kind==='plan'?'plan':area.kind==='industry'?'industrial-landscape':'nature',type:'area',sheet,sheetIndex,key:sheet.file+':'+area.id,detail:area.detail||'手工判读景观研究范围，不是法定生态边界、精确面积或进入许可。',detailEn:area.detailEn||'Manually interpreted study footprint, not a statutory boundary, measured area or access permission.'}));
 });
 const map = L.map('map',{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:false,attributionControl:true});
 map.attributionControl.setPrefix(false);
@@ -124,8 +125,8 @@ function render(){
  filtered.filter(record=>record.type==='area').concat(filtered.filter(record=>record.type==='line'),filtered.filter(record=>record.type==='point')).forEach(record=>{
   const active=record.key===selectedKey;let shape;
   if(record.type==='point')shape=L.circleMarker(coordinate(record.xy),{radius:active?10:6,weight:active?3:2,color:record.kind==='plan'?colors.plan:'#fff',fillColor:record.kind==='plan'?'#fff':colors[record.kind],fillOpacity:1});
-    else if(record.type==='area')shape=L.polygon(record.coords.map(coordinate),{color:colors[record.category],weight:active?3:1,dashArray:'5 4',fillColor:record.category==='industry'?'#c08a43':record.category==='plan'?'#8794c4':'#3d9c63',fillOpacity:record.category==='nature'?.22:.19});
-  else shape=L.polyline(record.coords.map(coordinate),{color:colors[record.kind],weight:active?6:3,dashArray:'8 7',opacity:.9});
+    else if(record.type==='area')shape=L.polygon(record.coords.map(coordinate),{color:colors[record.category],weight:active?3:1,dashArray:'5 4',fillColor:record.category==='industrial-heritage'?'#a34f3f':record.category==='industrial-landscape'?'#c08a43':record.category==='plan'?'#8794c4':'#3d9c63',fillOpacity:record.category==='nature'?.22:.19});
+  else shape=L.polyline(record.coords.map(coordinate),{color:colors[record.category],weight:active?6:3,dashArray:'8 7',opacity:.9});
   const tip=make('span',field(record,'name'));
   shape.bindTooltip(tip,{permanent:document.getElementById('labels').checked&&record.type==='point',direction:'right',className:'point-label',offset:[7,0]});
   shape.on('click',()=>selectRecord(record,false));shape.addTo(drawing);shapes.set(record.key,shape);
@@ -138,7 +139,7 @@ function render(){
  document.querySelectorAll('#layers input').forEach(input=>input.checked=enabled.has(input.value));
  requestAnimationFrame(declutter);
 }
-function categoryName(category){return t(category.name,{industry:'Industry and heritage',history:'History and culture',nature:'Nature and islands',city:'Cities and skylines',terminal:'Passenger nodes',route:'Ferries and cruises',plan:'Future development'}[category.key]);}
+function categoryName(category){return t(category.name,{'industrial-heritage':'Industrial heritage','industrial-landscape':'Industrial landscape',history:'History and culture',nature:'Nature and islands',city:'Cities and skylines',terminal:'Passenger nodes',route:'Ferries and cruises',plan:'Future development'}[category.key]);}
 function declutter(){const occupied=[];const mapRect=document.getElementById('map').getBoundingClientRect();[...shapes.entries()].sort(([keyA],[keyB])=>Number(keyB===selectedKey)-Number(keyA===selectedKey)).forEach(([key,shape])=>{const tooltip=shape.getTooltip();const element=tooltip&&tooltip.getElement();if(!element||!tooltip.options.permanent)return;element.style.visibility='visible';const rect=element.getBoundingClientRect();const collision=occupied.some(other=>rect.left<other.right+3&&rect.right>other.left-3&&rect.top<other.bottom+3&&rect.bottom>other.top-3);if(key!==selectedKey&&(collision||rect.right>mapRect.right||rect.bottom>mapRect.bottom||rect.left<mapRect.left||rect.top<mapRect.top))element.style.visibility='hidden';else occupied.push(rect);});}
 map.on('zoomend moveend',declutter);
 function renderLayers(){document.getElementById('layers').replaceChildren();categories.forEach(category=>{const row=make('label',undefined,'layer-row');const checkbox=make('input');checkbox.type='checkbox';checkbox.value=category.key;checkbox.checked=enabled.has(category.key);checkbox.setAttribute('aria-label',categoryName(category));const dot=make('span',undefined,'swatch');dot.style.background=category.color;row.append(checkbox,dot,make('span',categoryName(category)),make('span',String(records.filter(record=>record.category===category.key).length),'layer-count'));checkbox.addEventListener('change',()=>{if(checkbox.checked)enabled.add(category.key);else enabled.delete(category.key);document.getElementById('preset').value='custom';render();});document.getElementById('layers').append(row);});}
@@ -221,16 +222,16 @@ function renderRouteSupply(){
  panel.replaceChildren(make('h2',t('游线供给与短途组合','Ferry products and short breaks')),make('p',t('线路和港口均只对应下方产品表。实线表示已有目录、售票或开航报道关系；虚线表示 indicative 概念连线，不是AIS航迹。','Routes and ports correspond only to the product table below. Solid lines show documented directory, ticketing or launch relationships; dashed lines are indicative concepts, not AIS tracks.'),'lede'));
  const shell=make('div',undefined,'route-map-shell');const mapElement=make('div',undefined,'route-map');mapElement.setAttribute('aria-label',t('游线供给专用地图','Route supply map'));const controls=make('aside',undefined,'route-controls');controls.append(make('h3',t('图面线路','Mapped routes')),make('p',t('勾选或取消显示线路；港口随线路动态显示。','Toggle routes; related ports update automatically.'),'quiet'));
  const routeDefs=[
-  {id:'R01',product:0,ports:['T1','T2'],path:['R01'],status:'announced',color:'#285f82'},
-  {id:'R02',product:1,ports:['T3'],path:['R02'],status:'listed',color:'#246f9d'},
-  {id:'R03',product:2,ports:['T1','R3'],path:['T1','R3',[1120,450],'T1'],status:'indicative',color:'#b2762e'},
+  {id:'R01',product:0,ports:['T1','T2'],path:['R01'],status:'announced',color:'#245c9c'},
+  {id:'R02',product:1,ports:['T3'],path:['R02'],status:'listed',color:'#d36b2c'},
+  {id:'R03',product:2,ports:['T1','R3'],path:['T1','R3',[1120,450],'T1'],status:'indicative',color:'#6a4c93'},
   {id:'R04',product:3,ports:['T5'],path:['R04'],status:'indicative',color:'#9a5b2a'},
-  {id:'R05',product:4,ports:['HKT1','HKT2','HKT3'],path:['HKR1'],status:'listed',color:'#285f82'},
-  {id:'R06',product:5,ports:['HKC2','HKT5'],path:['HKC2','HKT5','HKC2'],status:'listed',color:'#246f9d'},
-  {id:'R07',product:6,ports:['T2','GS','DA'],path:['T2','GS','DA','T2'],status:'listed',color:'#285f82'},
-  {id:'R08',product:7,ports:['HKT5','HKH2'],path:['HKT5','HKH2'],status:'indicative',color:'#9a5b2a'},
-  {id:'R09',product:8,ports:['T4','GS','DA'],path:['T4','GS','DA'],status:'announced',color:'#a66422'},
-  {id:'R10',product:9,ports:['MO1','MO2'],path:['MO1','MO2','MO1'],status:'indicative',color:'#9a5b2a'}
+  {id:'R05',product:4,ports:['HKT1','HKT2','HKT3'],path:['HKR1'],status:'listed',color:'#2a8c7b'},
+  {id:'R06',product:5,ports:['HKC2','HKT5'],path:['HKC2','HKT5','HKC2'],status:'listed',color:'#c23b57'},
+  {id:'R07',product:6,ports:['T2','GS','DA'],path:['T2','GS','DA','T2'],status:'listed',color:'#d0a11e'},
+  {id:'R08',product:7,ports:['HKT5','HKH2'],path:['HKT5','HKH2'],status:'indicative',color:'#5d7f3f'},
+  {id:'R09',product:8,ports:['T4','GS','DA'],path:['T4','GS','DA'],status:'announced',color:'#1e8ca8'},
+  {id:'R10',product:9,ports:['MO1','MO2'],path:['MO1','MO2','MO1'],status:'indicative',color:'#7a566f'}
  ];
  const selected=new Set(routeDefs.map(route=>route.id));const routeLayers=new Map();const portLayers=new Map();
  routeDefs.forEach(route=>{const product=research.products[route.product];const label=make('label',undefined,'route-control');const input=document.createElement('input');input.type='checkbox';input.checked=true;input.value=route.id;const text=make('span');text.append(make('strong',tr(product.name)),make('small',route.status==='indicative'?t('indicative 概念连线 · 具体落位待核','Indicative concept line · exact placement unverified'):route.status==='announced'?t('报道／开航关系 · 非航迹','Reported / launched relationship · not a track'):t('目录或运营关系 · 非航迹','Directory / operating relationship · not a track')));label.append(input,text);controls.append(label);input.addEventListener('change',()=>{if(input.checked)selected.add(route.id);else selected.delete(route.id);renderRouteLayers();});});

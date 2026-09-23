@@ -10,7 +10,7 @@ if ((Resolve-Path -LiteralPath $Basemap).Path -ne (Join-Path $output 'basemap-re
     $baseImage.Save((Join-Path $output 'basemap-reference.png'), [System.Drawing.Imaging.ImageFormat]::Png)
 }
 $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes((Join-Path $output 'basemap-reference.png')))
-$colors = @{history='#B74448'; industry='#BE7224'; nature='#267754'; island='#147E87'; city='#75577D'; evidence='#BD425F'; terminal='#194E73'; context='#737E83'; plan='#5D61A3'; route1='#C13856'; route2='#14628B'; route3='#9A5B2A'}
+$colors = @{history='#B74448'; industry='#BE7224'; 'industrial-heritage'='#A34F3F'; 'industrial-landscape'='#BE7224'; nature='#267754'; island='#147E87'; city='#75577D'; evidence='#BD425F'; terminal='#194E73'; context='#737E83'; plan='#5D61A3'; route1='#C13856'; route2='#14628B'; route3='#9A5B2A'}
 $utf8 = [System.Text.UTF8Encoding]::new($false)
 $offsetX = 60
 $offsetY = 245
