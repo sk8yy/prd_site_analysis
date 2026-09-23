@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iyXgTIbSTgH7jwoHTGhpapzuGGa4o/KrzsS3/QVCKI0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CzNmDKnIjXmiKolUK/IhFuw/Q1VYZD5/YaElf/w5tr0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>环珠江口 · 景观与游线调研图谱</title>
 <link rel="stylesheet" href="vendor/leaflet.css">
 <style>
@@ -12,6 +12,7 @@
 .leaflet-tooltip.point-label{width:max-content}
 .pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}.pair-study{min-width:0;border-top:1px solid var(--line);padding-top:16px}.pair-study h3{margin:0 0 12px}.pair-map{display:block;width:100%;aspect-ratio:2200/1893;height:auto;background:#fff}.pair-map text{font-family:'Microsoft YaHei',sans-serif;letter-spacing:0}.port-key{display:flex;gap:8px 16px;flex-wrap:wrap;padding:10px 0;font-size:12px}.port-key span{display:inline-flex;align-items:center;gap:6px}.port-key b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#194e73;color:#fff;flex-shrink:0}.pair-study p{line-height:1.8;margin:8px 0}.pair-study h4{margin:14px 0 3px;font-size:13px}@media(max-width:900px){.pair-grid{grid-template-columns:minmax(0,1fr)}}
 .language{display:flex;flex-shrink:0}.language button{padding:7px 9px}.language button[aria-pressed=true]{background:#126c62;color:#fff}.head-meta{margin-left:auto;max-width:340px}.leaflet-tooltip.point-label{max-width:190px;white-space:normal;line-height:1.3;font-size:11px;overflow-wrap:anywhere}.map-stamp{max-width:calc(100% - 24px);pointer-events:none}.map-count{max-width:calc(100% - 74px);white-space:normal}.tabs{overflow-x:auto}.tabs button{white-space:nowrap;flex-shrink:0}.page h3{margin:24px 0 12px}.page td,.detail a{overflow-wrap:anywhere}.layer-row span{min-width:0}.brand-symbol{font-size:23px}.detail h2,.figure h3{overflow-wrap:anywhere}.table-scroll{max-width:100%}#region,#measure{width:100%;margin-bottom:12px}header{min-height:82px;height:auto;padding-top:12px;padding-bottom:12px}.criteria{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;border-block:1px solid var(--line);padding:14px 0;margin:20px 0}.assessment{padding:22px 0;border-bottom:1px solid var(--line)}.assessment-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.assessment-head h3{margin:0;font-size:18px}.measure-tag{padding:4px 8px;background:#e0eee5;color:#225c3b;font-size:12px}.measure-tag.upgrade{background:#fbebcf;color:#755118}.measure-tag.avoid{background:#f2dedc;color:#873f39}.measure-tag.pending{background:#e9eded;color:#52615e}.assessment-grid{display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:24px;margin:15px 0}.assessment p{line-height:1.85}.assessment h4{margin:0 0 7px}.references{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:12px;line-height:1.8}.assessment-filter{display:flex;gap:18px;flex-wrap:wrap;padding:12px 0}.assessment-filter label{display:flex;gap:6px;align-items:center}.source-record{padding:18px 0;border-bottom:1px solid var(--line);line-height:1.85}.source-record h3{font-size:16px;margin:0 0 6px}.source-record small{color:var(--muted)}html[lang=en] h1{font-size:20px}@media(max-width:640px){header{padding:12px;gap:8px}.brand-symbol,.head-meta{display:none}.brand{min-width:0}h1,html[lang=en] h1{font-size:17px}.eyebrow{font-size:9px}.tabs{padding:0 12px;gap:17px}.warning{display:none}.language button{padding:6px}.map-stamp{font-size:10px}.leaflet-tooltip.point-label{max-width:130px;font-size:10px}.page{padding:20px 14px}.table-scroll table{min-width:800px}.workspace{height:auto}.map-wrap{height:60dvh;min-height:380px}.criteria,.assessment-grid{grid-template-columns:1fr;gap:12px}}
+.measure-map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0 28px}.measure-map-card{min-width:0;border:1px solid var(--line);background:#fff}.measure-map-card header{height:auto;min-height:0;padding:14px 15px;border:0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.measure-map-card h3{margin:0;font-size:16px}.measure-map-card .measure-map-count{font-size:12px;color:var(--muted)}.measure-map{height:310px;background:#eef3f0}.measure-map-card .leaflet-container{font:11px 'Microsoft YaHei UI','Microsoft YaHei',sans-serif}.measure-map-card .leaflet-tooltip.measure-label{border:0;background:rgba(255,255,255,.9);box-shadow:0 1px 4px rgba(24,59,58,.16);color:var(--ink);padding:3px 5px;white-space:normal;max-width:150px}.measure-map-card .leaflet-tooltip.measure-label:before{display:none}@media(max-width:900px){.measure-map-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.measure-map-grid{grid-template-columns:1fr}.measure-map{height:280px}}
 </style>
 </head>
 <body>
@@ -94,6 +95,7 @@ function switchTab(name){
  document.querySelectorAll('[data-tab]').forEach(button=>{const active=button.dataset.tab===name;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;});
  document.querySelectorAll('[role=tabpanel]').forEach(panel=>panel.hidden=panel.id!=='view-'+name);
  if(name==='map')requestAnimationFrame(()=>map.invalidateSize());
+ if(name==='findings')requestAnimationFrame(()=>measureMaps.forEach(instance=>instance.invalidateSize()));
 }
 document.querySelectorAll('[data-tab]').forEach(button=>{
  button.addEventListener('click',()=>switchTab(button.dataset.tab));
@@ -167,8 +169,31 @@ function pairDiagram(config,pair){
  figure.append(svg,key,make('p',config.status==='listed'?t('蓝实线：已获航线目录／班表联系，非航迹；当日执行另核。','Blue solid: documented route / timetable relationship, not a track; daily operation unverified.'):config.status==='announced'?t('橙虚线：已售票及开航安排报道，当前执行待核；非航迹。','Orange dashed: reported ticket sales and launch arrangements; current operation unverified, not a track.'):t('灰虚线：跨城联系待核，不作为已营直达水运。','Grey dashed: connection under review, not a confirmed operating direct ferry.'),'quiet'));return figure;
 }
 let assessmentFilter='all';
+const measureMaps=new Map();
+function recordsForMeasure(measureKey){
+ const targets=new Set(research.assessments.filter(item=>item.measure===measureKey).map(item=>item.target));
+ return records.filter(record=>targets.has(record.id)||targets.has(record.parent));
+}
+function renderMeasureMaps(panel){
+ measureMaps.forEach(instance=>instance.remove());measureMaps.clear();
+ const grid=make('div',undefined,'measure-map-grid');
+ Object.entries(measures).filter(([key])=>key!=='pending').forEach(([key,label])=>{
+  const related=recordsForMeasure(key);const card=make('article',undefined,'measure-map-card');const head=make('header');head.append(make('h3',tr(label)),make('span',related.length+' '+t('个对象','objects'),'measure-map-count'));const mapElement=make('div',undefined,'measure-map');mapElement.setAttribute('aria-label',tr(label)+' '+t('相关项目地图','related-project map'));card.append(head,mapElement);grid.append(card);
+  const miniMap=L.map(mapElement,{crs:L.CRS.Simple,minZoom:-3,maxZoom:2,zoomSnap:.25,zoomControl:false,attributionControl:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false});
+  L.imageOverlay('../figures/basemap-reference.png',bounds,{opacity:.85}).addTo(miniMap);const layer=L.layerGroup().addTo(miniMap);const latLngs=[];
+  related.forEach(record=>{
+   const color=colors[record.category]||'#126c62';
+   if(record.type==='point'){const position=coordinate(record.xy);latLngs.push(position);L.circleMarker(position,{radius:7,color:'#fff',weight:2,fillColor:color,fillOpacity:.95}).bindTooltip(field(record,'name'),{permanent:true,direction:'top',className:'measure-label'}).addTo(layer);}
+   else if(record.type==='line'){const positions=record.coords.map(coordinate);latLngs.push(...positions);L.polyline(positions,{color,weight:4,opacity:.9,dashArray:record.category==='route'?'8 6':undefined}).bindTooltip(field(record,'name'),{sticky:true,className:'measure-label'}).addTo(layer);}
+   else {const positions=record.coords.map(coordinate);latLngs.push(...positions);L.polygon(positions,{color,weight:2,fillColor:color,fillOpacity:.22}).bindTooltip(field(record,'name'),{sticky:true,className:'measure-label'}).addTo(layer);}
+  });
+  miniMap.fitBounds(bounds,{padding:[8,8]});if(latLngs.length)miniMap.fitBounds(L.latLngBounds(latLngs),{padding:[28,28],maxZoom:0});measureMaps.set(key,miniMap);
+ });
+ panel.append(grid);
+}
 function renderAssessments(){
  const panel=document.getElementById('view-findings');panel.replaceChildren(make('h2',t('岸线措施：展靓、提质、遮瑕','Shoreline measures: showcase, upgrade, avoid')),make('p',t('以东岸及香港为重点的证据型初判。依次比较现状资源、旅游产品和公共空间供给，再识别缺口与手法；不是最终工程评级。','Evidence-led preliminary assessment focused on the east shore and Hong Kong: compare resources, tourism products and public space, identify gaps, then select interventions. Not a final engineering rating.'),'lede'));
+ renderMeasureMaps(panel);
  const criteria=make('div',undefined,'criteria');[['show','成熟优质岸线、规划展示机会或保护展示资源，优先补解说和产品组合。未建规划不等于景观质量差。','Strong existing shores, planned showcases or conservation interpretation: improve narratives and products. Unbuilt plans do not imply poor scenery.'],['upgrade','存量遗存、停用设施或岸上游览链确有改善线索时提质；不因缺少套餐而归类，未核状况列条件。','Upgrade existing heritage, disused facilities or shore circuits with an evidenced improvement need; missing packages alone are insufficient. Unverified conditions remain conditional.'],['avoid','约束不适合相应游览方式时绕避／减扰，不等于工业或生态岸线难看。','Avoid or reduce disturbance where constraints conflict with the proposed use, not because industry or ecology is unattractive.']].forEach(([key,zh,en])=>{const item=make('div');item.append(make('strong',tr(measures[key])),make('p',t(zh,en)));criteria.append(item);});panel.append(criteria);
  panel.append(make('p',t('证据不足单列“待研判”。当前没有充分船拍或现场依据将某段最终认定为需视觉遮挡的瑕疵岸线。','Insufficient evidence remains pending. No segment has enough boat-photo or field evidence here for a final visual-screening designation.')));
  const filters=make('div',undefined,'assessment-filter');[['all',['全部判断','All judgements']],...Object.entries(measures)].forEach(([key,label])=>{const row=make('label');const input=make('input');input.type='radio';input.name='assessment-filter';input.value=key;input.checked=assessmentFilter===key;input.addEventListener('change',()=>{assessmentFilter=key;renderAssessments();});row.append(input,make('span',tr(label)));filters.append(row);});panel.append(filters);
