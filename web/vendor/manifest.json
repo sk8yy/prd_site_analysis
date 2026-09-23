@@ -1,0 +1,27 @@
+[
+    {
+        "Name":  "leaflet.js",
+        "Url":  "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js",
+        "SHA256":  "DB49D009C841F5CA34A888C96511AE936FD9F5533E90D8B2C4D57596F4E5641A"
+    },
+    {
+        "Name":  "leaflet.css",
+        "Url":  "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css",
+        "SHA256":  "A7837102824184820DFA198D1EBCD109FF6D0FF9A2672A074B9A1B4D147D04C6"
+    },
+    {
+        "Name":  "leaflet-LICENSE.txt",
+        "Url":  "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/LICENSE",
+        "SHA256":  "53E8DC25862014E4324741CA18FBE3611E11D42EF69F59F86EA8C5389647D4CB"
+    },
+    {
+        "Name":  "lucide.js",
+        "Url":  "https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js",
+        "SHA256":  "3411692820CB8D47543F69496AA25FD603A358F4498046F41C508A5A3342210E"
+    },
+    {
+        "Name":  "lucide-LICENSE.txt",
+        "Url":  "https://cdn.jsdelivr.net/npm/lucide@0.468.0/LICENSE",
+        "SHA256":  "1E7290B35280A048667BBF0EBABAC1C7FD52A75300E8B2946AC165715997F2BC"
+    }
+]
