@@ -1,4 +1,7 @@
-﻿param([string]$Basemap = (Join-Path $env:TEMP 'prd_basemap_preview.png'))
+﻿param(
+    [string]$Basemap = (Join-Path $env:TEMP 'prd_basemap_preview.png'),
+    [string]$OnlySheet = ''
+)
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 $data = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'map-data.json') -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -10,7 +13,7 @@ if ((Resolve-Path -LiteralPath $Basemap).Path -ne (Join-Path $output 'basemap-re
     $baseImage.Save((Join-Path $output 'basemap-reference.png'), [System.Drawing.Imaging.ImageFormat]::Png)
 }
 $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes((Join-Path $output 'basemap-reference.png')))
-$colors = @{history='#B74448'; industry='#BE7224'; 'industrial-heritage'='#A34F3F'; 'industrial-landscape'='#BE7224'; nature='#267754'; island='#147E87'; city='#75577D'; evidence='#BD425F'; terminal='#194E73'; context='#737E83'; plan='#5D61A3'; route1='#C13856'; route2='#14628B'; route3='#9A5B2A'}
+$colors = @{history='#B74448'; industry='#BE7224'; 'industrial-heritage'='#A34F3F'; 'industrial-landscape'='#BE7224'; nature='#267754'; island='#147E87'; city='#75577D'; evidence='#BD425F'; terminal='#194E73'; context='#737E83'; plan='#5D61A3'; route1='#245C9C'; route2='#D36B2C'; route3='#9A5B2A'; route5='#2A8C7B'; route6='#C23B57'; route7='#D0A11E'; route8='#5D7F3F'; route9='#1E8CA8'; route10='#7A566F'}
 $utf8 = [System.Text.UTF8Encoding]::new($false)
 $offsetX = 60
 $offsetY = 245
@@ -108,6 +111,7 @@ function Add-Marker([single]$Left, [single]$Top, [string]$Kind, [string]$Identif
 
 try {
     foreach ($sheet in $data.sheets) {
+        if ($OnlySheet -and $sheet.file -ne $OnlySheet) { continue }
         $bitmap = [System.Drawing.Bitmap]::new(3300, 2380)
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
         $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
